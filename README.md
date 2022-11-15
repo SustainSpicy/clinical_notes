@@ -4,11 +4,11 @@
 
 - Install dependencies
 - NPM
- - #npm install
+  - #npm install
 - Yarn
- - #yarn add
+  - #yarn add
  
 - run project
   - #npm start
 - Yarn
- -  #yarn start
+  -  #yarn start
