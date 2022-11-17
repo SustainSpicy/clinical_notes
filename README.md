@@ -6,7 +6,7 @@
 - NPM
   - #npm install
 - Yarn
-  - #yarn add
+  - #yarn install
  
 - run project
   - #npm start
