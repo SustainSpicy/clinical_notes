@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import IntakeItem from "./IntakeItem.component";
 
 function IntakePanel(props) {
   const { children, value, index, ...other } = props;

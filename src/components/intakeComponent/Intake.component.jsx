@@ -5,7 +5,6 @@ import { BsGear } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { IconDiv } from "../styles/utils/icon";
 import { Link } from "react-router-dom";
-import { loadOneNote, updateOneNote } from "../../redux/Intake/intake.actions";
 import IntakePanel from "./intakePanel/IntakePanel.component";
 import IntakeItem from "./intakePanel/IntakeItem.component";
 import Checkbox from "../utils/CheckboxComponent/Checkbox.component";
@@ -32,15 +31,6 @@ function Intake({ intakes, headerTitle, btnText }) {
     return () => {};
   }, [intakes]);
 
-  //sets the completed list data of the table
-  const completed = useMemo(() => {
-    return allIntake.All.filter((item) => item.checked);
-  }, [allIntake]);
-  //sets the incomplete list data of the table
-  const incomplete = useMemo(() => {
-    return allIntake.All.filter((item) => !item.checked);
-  }, [allIntake]);
-
   //process the array data for the intakes lists taken from the reux store
   const intakeTabData = useMemo(() => {
     let tempData = {
@@ -48,6 +38,8 @@ function Intake({ intakes, headerTitle, btnText }) {
       inputRadius: "50%",
       tabData: [],
     };
+
+    // go through the intake list abd add all tabs to table
     Object.entries(allIntake).forEach(([key, value], index) => {
       tempData.tabData.push({
         id: index,
@@ -55,16 +47,18 @@ function Intake({ intakes, headerTitle, btnText }) {
         arrayData: value,
       });
     });
+
+    //add the prefered complete and incompleted tabs
     tempData.tabData.push({
       id: tempData.tabData.length,
       title: "Completed",
-      arrayData: completed,
+      arrayData: allIntake.All.filter((item) => item.checked),
     });
     tempData.tabData.push({
       id: tempData.tabData.length,
       title: "Incomplete",
       color: "red",
-      arrayData: incomplete,
+      arrayData: allIntake.All.filter((item) => !item.checked),
     });
 
     return tempData;
@@ -135,7 +129,11 @@ function Intake({ intakes, headerTitle, btnText }) {
                 let url = itemSelected.path;
 
                 return (
-                  <Link key={itemSelected.id} to={`/${url}`}>
+                  <Link
+                    key={itemSelected.id}
+                    to={`/${url}`}
+                    state={{ tab: url }}
+                  >
                     <IntakeItem>
                       <Checkbox
                         type="checkbox"

@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { StyledCheckbox } from "../../styles/utils/input.styled";
-import { connect } from "react-redux";
-import { updateOneNote } from "../../../redux/Intake/intake.actions";
 import Button from "@mui/material/Button";
+
 function IntakeItem({ children }) {
   return <IntakeItemWrapper>{children}</IntakeItemWrapper>;
 }
