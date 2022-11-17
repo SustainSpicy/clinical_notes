@@ -5,6 +5,7 @@ import {
   TextArea,
   SymptomListHeader,
   SymptomList,
+  AlertWrapper,
 } from "./Symptoms.styled";
 import {
   updateOneReview,
@@ -19,8 +20,13 @@ import SyptomPanel from "./symptomPanel/SymptomPanel.component";
 import { useSyptom } from "../../context/symptom.context";
 import Checkbox from "../utils/CheckboxComponent/Checkbox.component";
 import Divider from "@mui/material/Divider";
+import { useLocation } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 function Symptoms() {
+  // this get data from the page router
+  const { state } = useLocation();
+
   const [tab, setTab] = useState(0);
   //number of table to display on table,dafault to 3
   const [tabCollapse, setTabCollapse] = useState(3);
@@ -37,6 +43,9 @@ function Symptoms() {
     generatedText,
     setOtherField,
     allSymptom,
+    formData,
+    setError,
+    error,
   } = useSyptom();
 
   //process the array data for the symptoms lists taken from the redux store
@@ -104,7 +113,16 @@ function Symptoms() {
   const handleTextAreaChange = (e) => {
     e.preventDefault();
     setOtherField(e.target.value);
-    setOther("reviewofsystems", e.target.value);
+    setOther(state.tab, e.target.value);
+  };
+  const handleGenerate = (e) => {
+    e.preventDefault();
+
+    if (formData.size < 1) {
+      setError({ type: "error", msg: "No symptom selected" });
+    } else {
+      generateSymptoms();
+    }
   };
 
   return (
@@ -157,7 +175,7 @@ function Symptoms() {
                         setInputBox(
                           itemSelected.id,
                           item.title,
-                          "reviewofsystems",
+                          state.tab,
                           itemSelected.title
                         );
                       }}
@@ -193,9 +211,7 @@ function Symptoms() {
       <div>
         <SectionHead>
           <label>Narrative</label>
-          <StyledPrimaryBtn onClick={() => generateSymptoms()}>
-            Generate
-          </StyledPrimaryBtn>
+          <StyledPrimaryBtn onClick={handleGenerate}>Generate</StyledPrimaryBtn>
         </SectionHead>
         <TextArea
           value={generatedText}
@@ -203,6 +219,12 @@ function Symptoms() {
           readOnly
           height={"150px"}
         />
+
+        {error && (
+          <AlertWrapper>
+            <Alert severity={error.type}>{error.msg}</Alert>
+          </AlertWrapper>
+        )}
       </div>
     </div>
   );
@@ -210,9 +232,6 @@ function Symptoms() {
 const mapStateToProps = (state) => {
   return {
     intakes: state.intake.user.clinicalNotes,
-    // options: state.intake.user.clinicalNotes.All.find(
-    //   (item) => item.path === "reviewofsystems"
-    // ).options,
   };
 };
 

@@ -53,8 +53,13 @@ export const StyledPrimaryBtn = styled(Button)`
   border-radius: 5px !important;
   background-color: ${({ theme }) => theme.generalColors.fadedBlue} !important;
   color: ${({ theme }) => theme.generalColors.white} !important;
+  position: relative;
   & svg path {
     stroke: ${({ theme }) => theme.generalColors.white};
+  }
+  &:disabled {
+    pointer-events: initial !important;
+    cursor: not-allowed !important;
   }
 `;
 

@@ -43,7 +43,7 @@ function Header({ logoText, greeting, userName, userImg }) {
           <span className="greeting">{greeting},</span>
           <span className="name">{userName}</span>
           <ImageDiv radius="50%" height={"30px"} width={"30px"}>
-            <img src={userImg} alt="profile image" />
+            <img src={userImg} alt="profile" />
           </ImageDiv>
           {/* <Avatar alt="profile image" src={userImg} /> */}
           <BiChevronDown className="dropDown" size={"20px"} />

@@ -32,6 +32,7 @@ export const CenterColumn = styled(Card)`
   grid-row: 1/2;
   min-width: 500px !important;
   overflow-y: scroll;
+  position: relative;
   & > div:nth-child(1) {
     flex: 0.2;
   }

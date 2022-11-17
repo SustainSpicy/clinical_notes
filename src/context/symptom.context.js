@@ -6,6 +6,7 @@ import {
   updateIntakeStatus,
 } from "../redux/Intake/intake.actions";
 
+// req.path.slice(0, -1);
 //  this supplies a specific screen with the necessary
 //  data it needs and updates the redux store
 const symptomContext = createContext();
@@ -20,28 +21,37 @@ function SymptomProvider({
 }) {
   const [allSymptom, setAllSymptom] = useState(options);
   const [otherField, setOtherField] = useState(other);
-  const [generatedText, setGeneratedText] = useState();
-  const [error, setError] = useState(false);
+  const [generatedText, setGeneratedText] = useState(undefined);
+  const [error, setError] = useState(undefined);
+
   let formData = new Map();
 
   //sets the checkbox data to the redux store
   function setInputBox(itemID, key, tab, value) {
-    formData.set(value, value);
+    if (formData.has(value)) {
+      formData.delete(value);
+    } else {
+      formData.set(value, value);
+    }
     updateOneReviewOptions(itemID, key, tab);
   }
   //sets the other text field data to the redux store
   function setOther(tab, value) {
+    if (value === "") {
+      return formData.delete("other");
+    }
+    formData.set("other", value);
     setOtherField(value);
     updateOneReviewOther(tab, value);
   }
 
   //generates the summary of the inputes on the page to the narrate field
   function generateSymptoms() {
-    let generatedText = "===============Symptoms Include=============\n";
-    console.log("Generating....");
-
     //check if there is any box checked
     if (formData.size > 0) {
+      let generatedText = "===============Symptoms Include=============\n";
+      console.log("Generating....");
+
       let form = options;
       Object.entries(form).forEach(([key, value], index) => {
         if (key !== "other" && value.length > 0) {
@@ -72,9 +82,17 @@ function SymptomProvider({
     return () => {};
   }, [options]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setError(undefined);
+    }, 4000);
+    return () => {};
+  }, [error]);
+
   return (
     <symptomContext.Provider
       value={{
+        formData,
         error,
         setError,
         allSymptom,
